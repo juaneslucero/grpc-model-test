@@ -12,9 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install protobuf compiler (protoc)
-        run: |
-          apt install -y protobuf-compiler \
-          && protoc --version
+        uses: arduino/setup-protoc@v1
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
