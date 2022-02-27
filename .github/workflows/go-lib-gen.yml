@@ -1,0 +1,47 @@
+# This is a basic workflow to generate a Go library for proto definitions.
+
+name: go-lib-gen
+
+on:
+  push:
+    branches: [ main ]
+  pull_requests:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install protobuf compiler (protoc)
+        run: |
+        apt install -y protobuf-compiler \
+        && protoc --version
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+      - name: Install Go Proto Gen
+        run: |
+        go install google.golang.org/protobuf/cmd/protoc-gen-go \
+        && github.com/twitchtv/twirp/protoc-gen-twirp
+      - name: Generate Go library
+        run: |
+        mkdir go && \
+        protoc \
+            --twirp_out=go \
+            --go_out=go \
+            models/service.proto
+      - name: Pushes to Go lib package
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: go/
+          destination-github-username: 'juaneslucero'
+          destination-repository-name: 'grpc-model-test-go-lib'
+          user-email: juaneslucero@gmail.com
+          commit-message: See ORIGIN_COMMIT from $GITHUB_REF
+          target-branch: main
+
+
