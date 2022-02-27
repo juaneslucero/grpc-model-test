@@ -19,8 +19,8 @@ jobs:
           go-version: '1.16'
       - name: Install Go Proto Gen
         run: |
-          go install google.golang.org/protobuf/cmd/protoc-gen-go \
-          && github.com/twitchtv/twirp/protoc-gen-twirp
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest \
+          && go install github.com/twitchtv/twirp/protoc-gen-twirp@latest
       - name: Generate Go library
         run: |
           mkdir go
