@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package grpc.model.test;
+
+option go_package = "models/grpc_model_test";
+
+// HaberdasherService makes hats for clients.
+service HaberdasherService {
+    // MakeHat produces a hat of mysterious, randomly-selected color!
+    rpc MakeHat(MakeHatRequest) returns (MakeHatResponse);
+}
+
+// MakeHat Request
+message MakeHatRequest {
+    Size size = 1;
+}
+
+// Size of a Hat, in inches.
+message Size {
+    int32 inches = 1; // must be > 0
+}
+
+// MakeHat Response
+message MakeHatResponse {
+    Hat hat = 1;
+}
+  
+// A Hat is a piece of headwear made by a Haberdasher.
+message Hat {
+    int32 inches = 1;
+    string color = 2; // anything but "invisible"
+    string name = 3; // i.e. "bowler"
+}
